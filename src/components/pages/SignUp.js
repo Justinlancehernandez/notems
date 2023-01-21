@@ -4,26 +4,30 @@ import { AddUser } from "../services/UserService"
 import Swal from "sweetalert2";
 export class SignUp extends React.Component {
     state = {
-        data: {}
+        data: {},
+        isNavigate:false
     }
     handleSubmit(){
-          AddUser(this.state.data).then(()=>{
-          
-          });
-        
-          <Navigate to  = "/home"/>             
+          AddUser(this.state.data).then((res)=>{
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your Accout Has Been Created ',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.setState({...this.state,isNavigate:true})
+          });                  
     }
     handleAddData(field, value) {
         this.setState({ ...this.state, data: { ...this.state.data, [field]: value } })
-
     }
     render() {
         return (
             <>
                 <div className="d-flex justify-content-center p-5">
-
-                    <form className="w-50 mt-5 bg-warning p-3" onSubmit={() => this.handleSubmit()}>
-                        <h1>Note Management System </h1>
+                <div className="border border-dark bg-warning p-5">
+                <h1>Note Management System </h1>
                         <h1>SignUp</h1>
                         <div class="form-outline mb-4">
                             <input type="text" class="form-control" val={this.state.data.name} onChange={(e) => this.handleAddData("name", e.target.value)} />
@@ -43,13 +47,12 @@ export class SignUp extends React.Component {
 
 
 
-                        <button type="submit" class="btn btn-primary btn-block mb-4">Sign Up</button>
+                        <button onClick={()=>this.handleSubmit()} type="submit" class="btn btn-primary btn-block mb-4">Sign Up</button>
                         <p>Already have an account</p><Link to ="/login"><a>Log in</a></Link>
-
-
-                    </form>
                 </div>
-
+                  
+                </div>
+           {this.state.isNavigate?<Navigate to ="*"/>:null} 
             </>
         )
 
